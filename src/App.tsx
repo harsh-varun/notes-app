@@ -68,7 +68,7 @@ export default function App() {
 
   return (
     <>
-      <div className="p-4 pb-0 flex justify-center">
+      <div className="p-4 pb-0 flex flex-col items-center">
         <div className="w-[90vw] min-h-[90vh] bg-white p-8 pt-0 rounded-t-3xl">
           {/* add button */}
           <div className="sticky top-0 z-60 flex py-4 border-b border-black/15 bg-white justify-between items-center">
@@ -168,6 +168,10 @@ export default function App() {
           ) : (
             <div></div>
           )}
+        </div>
+        <div className="h-[6vh] flex items-center">
+          <span className="text-xs text-zinc-900/60">An open-source project by </span>&nbsp;
+          <a href="https://github.com/harsh-varun/notes-app" target="_target" className="text-xs text-zinc-900/60 underline underline-offset-2">Harsh Varun.</a>
         </div>
       </div>
     </>
