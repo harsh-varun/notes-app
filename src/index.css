@@ -1,7 +1,12 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+* {
+    @apply transition-colors duration-200;
+}
 
 html{
-    background-color: #f4f4f5;
+    /* background-color: #; */
     
     ::-webkit-scrollbar{
         display: none;
