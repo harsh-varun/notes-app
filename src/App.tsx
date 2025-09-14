@@ -7,7 +7,8 @@ type Note = {
   title: string;
   description: string;
   bg: string;
-  date: any;
+  date: string;
+  time: string;
 };
 
 const colors = ["FBBF24", "FB923C", "C084FC", "A3E635", "34D399"];
@@ -17,12 +18,12 @@ export default function App() {
   const [description] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  // const [isCancelButton, setIsCancelButton] = useState(false);
 
   // Add Note
   const addNote = (bg: string) => {
     const timestamp = Date.now();
     const date = new Date(timestamp).toLocaleDateString();
+    const time = new Date(timestamp).toTimeString();
 
     const newNote = {
       id: timestamp,
@@ -30,6 +31,7 @@ export default function App() {
       description,
       bg,
       date,
+      time,
     };
 
     const updatedNotes = [newNote, ...notes];
@@ -62,22 +64,44 @@ export default function App() {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id != id));
   };
 
+  //Toggle theme
+  const toggleTheme = () => {
+    if (isDarkMode) {
+      setIsDarkMode(false);
+      localStorage.setItem("Theme", "light");
+    } else {
+      setIsDarkMode(true);
+      localStorage.setItem("Theme", "dark");
+    }
+  };
+
   useEffect(() => {
     const storedNotes = JSON.parse(localStorage.getItem("Notes") || "[]");
     setNotes(storedNotes);
   }, []);
 
+  useEffect(() => {
+    const theme = localStorage.getItem("Theme");
+    if (theme === "light") {
+      setIsDarkMode(false);
+    } else {
+      setIsDarkMode(true);
+    }
+  }, []);
+
   return (
     <>
-      <div className={` ${isDarkMode && "dark"} `}>
+      <div className={` ${isDarkMode && "dark"}`}>
         <div className="p-4 pb-0 flex flex-col bg-[#f4f4f5] dark:bg-neutral-950 items-center">
           <div className="w-[90vw] min-h-[92vh] bg-white dark:bg-neutral-900 p-8 pt-0 rounded-t-3xl">
             {/* add button */}
             <div className="sticky top-0 z-60 flex py-4 border-b border-black/15 dark:border-white/15 bg-white dark:bg-neutral-900 justify-between items-center">
               <div className="flex items-center">
-                <h1 className="font-bold dark:text-white pe-2 lg:pe-4 hidden lg:flex">Notes</h1>
+                <h1 className="font-bold dark:text-white pe-2 lg:pe-4 hidden lg:flex">
+                  Notes
+                </h1>
                 <button
-                  onClick={() => setIsDarkMode((prev) => !prev)}
+                  onClick={toggleTheme}
                   className="p-2 rounded-full hover:bg-zinc-900/15 dark:hover:bg-zinc-400/15"
                 >
                   {isDarkMode ? (
@@ -113,7 +137,7 @@ export default function App() {
                   )}
                 </button>
               </div>
-              <div>
+              <div className="absolute h-full flex items-center left-[50%] translate-x-[-50%]">
                 <div className="flex gap-2 items-end">
                   {colors.map((color, idx) => (
                     <button
@@ -174,8 +198,9 @@ export default function App() {
                         }
                       ></textarea>
                       <div className="flex justify-between">
-                        <div className="mt-2 text-xs text-zinc-900 flex items-center">
-                          {note.date}
+                        <div className="mt-2 gap-4 text-xs text-zinc-900 flex items-center">
+                          <div> {note.date} </div>
+                          <div> {note.time.slice(0, 5)} </div>
                         </div>
                         <div className="flex items-end">
                           <button
