@@ -60,8 +60,10 @@ export default function App() {
   };
 
   // Delete single note
-  const deleteSingle = (id: number) => {
-    setNotes((prevNotes) => prevNotes.filter((note) => note.id != id));
+  const deleteSingle = async(id: number) => {
+    const newNotes = notes.filter((note) => note.id != id);
+    setNotes(newNotes);
+    localStorage.setItem("Notes", JSON.stringify(newNotes));
   };
 
   //Toggle theme
@@ -227,8 +229,9 @@ export default function App() {
             </div>
 
             {notes.length === 0 ? (
-              <div className="h-[70vh] dark:text-white flex justify-center items-center">
+              <div className="h-[70vh] dark:text-white flex flex-col gap-2 justify-center items-center">
                 <p>You don&apos;t have any notes.</p>
+                <button onClick={() => addNote('FBBF24')} className="px-4 py-2 text-sm bg-[#FBBF24] text-zinc-950 rounded-2xl cursor-pointer">Add Note</button>
               </div>
             ) : (
               <div></div>
